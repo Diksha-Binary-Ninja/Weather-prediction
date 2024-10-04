@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Rainfall Prediction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🌧 Rainfall Prediction</h1>
+        <form action="/predict" method="POST">
+            <div class="input-group">
+                <label for="state" class="label">🌍 Select State:</label>
+                <select name="state" id="state" class="dropdown" required>
+                    <option value="">Select State</option>
+                    {% for state in states %}
+                        <option value="{{ state }}">{{ state }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="district" class="label">🏙️ Select District:</label>
+                <select name="district" id="district" class="dropdown" required>
+                    <option value="">Select District</option>
+                    <!-- District options will be populated here -->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="month" class="label">📅 Select Month:</label>
+                <select name="month" id="month" class="dropdown" required>
+                    <option value="">Select Month</option>
+                    <option value="JAN">January</option>
+                    <option value="FEB">February</option>
+                    <option value="MAR">March</option>
+                    <option value="APR">April</option>
+                    <option value="MAY">May</option>
+                    <option value="JUN">June</option>
+                    <option value="JUL">July</option>
+                    <option value="AUG">August</option>
+                    <option value="SEP">September</option>
+                    <option value="OCT">October</option>
+                    <option value="NOV">November</option>
+                    <option value="DEC">December</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="year" class="label">📅 Select Year:</label>
+                <select name="year" id="year" class="dropdown" required>
+                    <option value="">Select Year</option>
+                    {% for year in range(2000, 2025) %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">🌧 Predict Rainfall</button>
+        </form>
+
+        <h2>🌦 Get Current Weather</h2>
+        <form id="weather-form">
+            <div class="input-group">
+                <label for="city" class="label">🏙️ Enter City Name:</label>
+                <input type="text" id="city" name="city" class="dropdown" required>
+            </div>
+            <button type="submit">☁️ Get Weather</button>
+        </form>
+
+        <div id="weather-result" class="result"></div> <!-- Weather result will be displayed here -->
+        
+        
+    </div>
+
+    <script>
+        // Handle weather request
+        document.getElementById("weather-form").onsubmit = function(e) {
+            e.preventDefault(); // Prevent default form submission
+            const city = document.getElementById("city").value;
+            fetchWeather(city);
+        };
+
+        function fetchWeather(city) {
+            fetch(`/weather?city=${encodeURIComponent(city)}`)
+            .then(response => response.json())
+            .then(data => {
+                const weatherResult = document.getElementById("weather-result");
+                if (data.error) {
+                    weatherResult.innerText = data.error;
+                } else {
+                    weatherResult.innerText = `Weather: ${data.weather}`; // Display the weather info
+                }
+            });
+        }
+
+        function startVoiceRecognition() {
+            const statusElement = document.getElementById("status");
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            
+            recognition.onstart = function() {
+                statusElement.innerText = "🎤 Listening...";
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                statusElement.innerText = "You said: " + transcript; // Optional: display what was recognized
+                document.getElementById("state").value = transcript; // Set state value based on voice input
+            };
+
+            recognition.onerror = function(event) {
+                statusElement.innerText = "Error occurred: " + event.error;
+            };
+
+            recognition.onend = function() {
+                statusElement.innerText = ""; // Clear the status message when done
+            };
+
+            recognition.start(); // Start the recognition
+        }
+
+        $(document).ready(function() {
+            $('#state').change(function() {
+                const state = $(this).val();
+                $('#district').empty().append('<option value="">Select District</option>');
+                
+                if (state) {
+                    $.ajax({
+                        url: '/get_districts',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ state: state }),
+                        success: function(districts) {
+                            districts.forEach(function(district) {
+                                $('#district').append('<option value="' + district + '">' + district + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

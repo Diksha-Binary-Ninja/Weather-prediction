@@ -1,0 +1,98 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9f0f7;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 420px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+h1 {
+    color: #2a9df4;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.label {
+    font-weight: bold;
+    color: #555;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+button {
+    background-color: #2a9df4;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #55b0f6;
+}
+
+.result {
+    margin-top: 20px;
+    color: #2a9df4;
+    font-size: 18px;
+}
+
+
+
+
+button {
+    background-color: #4682B4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #5a9bd3;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+.voice-input-section {
+    margin-top: 30px;
+}
+
+#result-text {
+    font-size: 18px;
+    font-weight: bold;
+}

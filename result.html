@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Rainfall Prediction Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <p>{{ result|safe }}</p>
+        
+        <!-- Canvas elements for multiple visualizations -->
+        <h3>1. Comparative Bar Chart</h3>
+        <canvas id="comparisonChart" width="400" height="200"></canvas>
+        
+        <h3>2. Monthly Trend Line Chart</h3>
+        <canvas id="trendChart" width="400" height="200"></canvas>
+        
+        <h3>3. Rainfall Gauge</h3>
+        <canvas id="gaugeChart" width="400" height="200"></canvas>
+        
+        <a href="/">Go Back</a>
+    </div>
+
+    <!-- JavaScript for rendering multiple charts -->
+    <script>
+        // 1. Comparative Bar Chart for Historical vs Predicted Rainfall
+        const comparisonData = {
+            labels: ['Historical Average', 'Predicted Rainfall'],
+            datasets: [{
+                label: 'Rainfall Amount (mm)',
+                data: [151.70, 141.52], // Replace with dynamic values
+                backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1
+            }]
+        };
+        const comparisonConfig = {
+            type: 'bar',
+            data: comparisonData,
+            options: {
+                plugins: {
+                    title: { display: true, text: 'Comparison of Historical vs Predicted Rainfall' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        };
+        new Chart(document.getElementById('comparisonChart'), comparisonConfig);
+
+        // 2. Monthly Trend Line Chart for Rainfall Over a Year
+        const trendData = {
+            labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+            datasets: [{
+                label: 'Monthly Rainfall (mm)',
+                data: [120, 130, 140, 141.52, 200, 250, 300, 220, 180, 160, 110, 90], // Replace with real values
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        };
+        const trendConfig = {
+            type: 'line',
+            data: trendData,
+            options: {
+                plugins: {
+                    title: { display: true, text: 'Rainfall Trend Over the Year' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        };
+        new Chart(document.getElementById('trendChart'), trendConfig);
+
+        // 3. Gauge Chart to Indicate Rainfall Level
+        const gaugeData = {
+            labels: ['Below Average', 'Average', 'Above Average'],
+            datasets: [{
+                label: 'Rainfall Level',
+                data: [141.52, 151.70, 160], // Sample values for the gauge
+                backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(255, 205, 86, 0.6)', 'rgba(75, 192, 192, 0.6)']
+            }]
+        };
+        const gaugeConfig = {
+            type: 'doughnut',
+            data: gaugeData,
+            options: {
+                plugins: {
+                    title: { display: true, text: 'Rainfall Level Gauge' }
+                },
+                circumference: 180,
+                rotation: -90
+            }
+        };
+        new Chart(document.getElementById('gaugeChart'), gaugeConfig);
+    </script>
+</body>
+</html>
